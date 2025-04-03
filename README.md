@@ -25,7 +25,6 @@ A modern, responsive music player interface built with React, TypeScript, and SC
 
 ```bash
 git clone https://github.com/sainath-666/spotify_clone
-cd music-player-ui
 ```
 
 2. Install dependencies:
