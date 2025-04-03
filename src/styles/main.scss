@@ -1,0 +1,704 @@
+// Variables
+$primary-color: #0a0c14;  // Darker navy blue
+$secondary-color: #1a1e2d;  // Slightly lighter navy
+$text-primary: #ffffff;
+$text-secondary: rgba(255, 255, 255, 0.7);
+$accent-color: #1db954;
+$transition-duration: 0.3s;
+$sidebar-width: 240px;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// Global styles
+body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #1a1e2d 0%, #0a0c14 100%);
+  color: $text-primary;
+  min-height: 100vh;
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  transition: background 0.3s ease;
+}
+
+// Main content layout
+.main-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+// Sidebar styles
+.sidebar {
+  width: $sidebar-width;
+  min-width: $sidebar-width;
+  padding: 24px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: transparent;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  @media (max-width: 768px) {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    z-index: 1000;
+
+    &.open {
+      transform: translateX(0);
+    }
+  }
+
+  .sidebar-content {
+    flex: 1;
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 32px;
+    padding: 0 4px;
+
+    .brand-logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .brand-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: $text-primary;
+      letter-spacing: -0.5px;
+    }
+  }
+
+  .sidebar-profile {
+    margin-top: auto;
+    padding: 16px 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    .profile-image {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .sidebar-nav {
+    .nav-link {
+      color: $text-secondary;
+      padding: 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: color $transition-duration ease;
+      font-size: 14px;
+      opacity: 0.7;
+
+      &:hover, &.active {
+        color: $text-primary;
+        opacity: 1;
+      }
+
+      svg {
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+// Songs section styles
+.songs-section {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  overflow-y: auto;
+  background: transparent;
+
+  .section-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 24px;
+    color: $text-primary;
+  }
+
+  .search-container {
+    margin-bottom: 24px;
+    width: 100%;
+
+    .search-input-wrapper {
+      position: relative;
+      width: 100%;
+
+      svg {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #a7a7a7;
+        width: 20px;
+        height: 20px;
+        pointer-events: none;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 12px 12px 12px 40px;
+        border-radius: 4px;
+        border: none;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 14px;
+
+        &::placeholder {
+          color: #a7a7a7;
+        }
+
+        &:focus {
+          outline: none;
+          background-color: rgba(255, 255, 255, 0.15);
+        }
+      }
+    }
+  }
+
+  .song-list {
+    .song-item {
+      @include flex-between;
+      padding: 8px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color $transition-duration ease;
+      margin-bottom: 2px;
+      background-color: transparent;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.03);
+      }
+
+      &.active {
+        background-color: rgba(30, 35, 48, 0.8);
+      }
+
+      .song-info {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex: 1;
+        min-width: 0; // For text truncation
+
+        .song-thumbnail {
+          position: relative;
+          width: 40px;
+          height: 40px;
+          flex-shrink: 0;
+
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 4px;
+          }
+
+          .playing-indicator {
+            position: absolute;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1px;
+
+            .bar {
+              width: 2px;
+              height: 8px;
+              background-color: $accent-color;
+              animation: soundBars 1s ease infinite;
+
+              &:nth-child(2) {
+                animation-delay: 0.2s;
+              }
+
+              &:nth-child(3) {
+                animation-delay: 0.4s;
+              }
+            }
+          }
+        }
+
+        .song-details {
+          min-width: 0; // For text truncation
+          flex: 1;
+
+          h3 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 400;
+            color: $text-primary;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+
+          p {
+            margin: 4px 0 0;
+            font-size: 14px;
+            color: $text-secondary;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+      }
+
+      .song-duration {
+        font-size: 14px;
+        color: $text-secondary;
+        margin-left: 32px;
+        flex-shrink: 0;
+      }
+    }
+  }
+
+  // Scrollbar styling
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 3px solid $primary-color;
+    border-radius: 6px;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+// Player section styles
+.player-section {
+  width: 480px;
+  min-width: 480px;
+  display: flex;
+  flex-direction: column;
+  padding: 50px 26px;
+  background: transparent;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+
+  .current-song-info {
+    text-align: left;
+    margin-bottom: 24px;
+
+    h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: $text-primary;
+    }
+
+    p {
+      font-size: 16px;
+      color: $text-secondary;
+      margin: 0 0 24px;
+    }
+
+    .album-art {
+      width: 100%;
+      padding-top: 100%; // Makes it square
+      position: relative;
+      margin-bottom: 24px;
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+
+      img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+
+  .player-controls {
+    margin-top: auto;
+
+    .progress-container {
+      margin-bottom: 24px;
+      position: relative;
+
+      .progress-bar {
+        width: 100%;
+        height: 4px;
+        -webkit-appearance: none;
+        appearance: none;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        outline: none;
+        transition: all $transition-duration ease;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+
+        // This creates the filled portion
+        &::-webkit-slider-runnable-track {
+          width: 100%;
+          height: 100%;
+          background: transparent;
+        }
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 0;
+          height: 100%;
+          background: transparent;
+          box-shadow: -300px 0 0 300px $text-primary; // This creates the fill effect
+          cursor: pointer;
+        }
+
+        &::-moz-range-track {
+          width: 100%;
+          height: 100%;
+          background: transparent;
+        }
+
+        &::-moz-range-thumb {
+          width: 0;
+          height: 100%;
+          background: transparent;
+          border: none;
+          box-shadow: -300px 0 0 300px $text-primary;
+          cursor: pointer;
+        }
+
+        &:hover {
+          &::-webkit-slider-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: $text-primary;
+            margin-top: -4px;
+            box-shadow: -300px 0 0 300px $text-primary;
+          }
+
+          &::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: $text-primary;
+            margin-top: -4px;
+            box-shadow: -300px 0 0 300px $text-primary;
+          }
+        }
+      }
+    }
+
+    .control-buttons-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding: 0 16px;
+
+      .menu-button {
+        background: none;
+        border: none;
+        color: $text-secondary;
+        cursor: pointer;
+        padding: 8px;
+        transition: all $transition-duration ease;
+        font-size: 20px;
+
+        &:hover {
+          color: $text-primary;
+        }
+      }
+
+      .control-buttons {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 32px;
+
+        .control-button {
+          background: none;
+          border: none;
+          color: $text-secondary;
+          cursor: pointer;
+          padding: 8px;
+          transition: all $transition-duration ease;
+          font-size: 24px;
+
+          &:hover {
+            color: $text-primary;
+            transform: scale(1.1);
+          }
+
+          &.play {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: $text-primary;
+            color: $primary-color;
+            @include flex-center;
+            font-size: 28px;
+
+            &:hover {
+              transform: scale(1.05);
+              background-color: #fff;
+            }
+          }
+        }
+      }
+
+      .volume-button {
+        background: none;
+        border: none;
+        color: $text-secondary;
+        cursor: pointer;
+        padding: 8px;
+        transition: all $transition-duration ease;
+        font-size: 20px;
+
+        &:hover {
+          color: $text-primary;
+        }
+      }
+    }
+  }
+}
+
+// Song list styles
+.song-list {
+  .song-item {
+    @include flex-between;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color $transition-duration ease;
+    margin-bottom: 2px;
+    background-color: transparent;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    &.active {
+      background-color: rgba(30, 35, 48, 0.8);
+    }
+
+    .song-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0; // For text truncation
+
+      .song-thumbnail {
+        position: relative;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%; // Make thumbnails circular
+        }
+
+        .playing-indicator {
+          position: absolute;
+          bottom: -4px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 1px;
+
+          .bar {
+            width: 2px;
+            height: 8px;
+            background-color: $accent-color;
+            animation: soundBars 1s ease infinite;
+
+            &:nth-child(2) {
+              animation-delay: 0.2s;
+            }
+
+            &:nth-child(3) {
+              animation-delay: 0.4s;
+            }
+          }
+        }
+      }
+
+      .song-details {
+        min-width: 0; // For text truncation
+        flex: 1;
+
+        h3 {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 400;
+          color: $text-primary;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        p {
+          margin: 4px 0 0;
+          font-size: 14px;
+          color: $text-secondary;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+    }
+
+    .song-duration {
+      font-size: 14px;
+      color: $text-secondary;
+      margin-left: 32px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Animations
+@keyframes soundBars {
+  0% {
+    height: 2px;
+  }
+  50% {
+    height: 12px;
+  }
+  100% {
+    height: 2px;
+  }
+}
+
+.fade-enter {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity $transition-duration ease;
+}
+
+.fade-exit {
+  opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity $transition-duration ease;
+}
+
+.menu-container {
+  position: relative;
+
+  .menu-button {
+    background: none;
+    border: none;
+    color: $text-secondary;
+    cursor: pointer;
+    padding: 8px;
+    transition: all $transition-duration ease;
+    font-size: 20px;
+
+    &:hover {
+      color: $text-primary;
+    }
+  }
+
+  .menu-dropdown {
+    position: absolute;
+    bottom: calc(100% + 8px); // Position above the button
+    left: 0;
+    min-width: 200px;
+    background-color: rgba(24, 24, 48, 0.98);
+    border-radius: 8px;
+    padding: 8px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; // Position the arrow at the bottom
+      left: 16px;
+      width: 8px;
+      height: 8px;
+      background-color: rgba(24, 24, 48, 0.98);
+      transform: rotate(45deg);
+    }
+
+    .menu-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: none;
+      background: none;
+      color: $text-secondary;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all $transition-duration ease;
+      border-radius: 4px;
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: $text-primary;
+      }
+
+      svg {
+        font-size: 16px;
+      }
+
+      &:hover svg {
+        color: $accent-color;
+      }
+    }
+  }
+} 
