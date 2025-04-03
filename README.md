@@ -24,7 +24,7 @@ A modern, responsive music player interface built with React, TypeScript, and SC
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/sainath-666/spotify_clone
 cd music-player-ui
 ```
 
