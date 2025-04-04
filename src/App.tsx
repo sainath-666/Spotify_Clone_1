@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Container } from "react-bootstrap";
 import "./styles/main.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { songs } from "./data/songs";
@@ -51,11 +50,6 @@ const App: React.FC = () => {
     }
   }, [isPlaying, currentSong]);
 
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = volume / 100;
-    }
-  }, [volume]);
 
   const handleSongSelect = (song: Song) => {
     setCurrentSong(song);
@@ -130,7 +124,7 @@ const App: React.FC = () => {
       case "for-you":
       case "top-tracks":
         return true;
-      case "favourites":
+      case "favorites":
         return favorites.has(song.id);
       case "recently-played":
         return recentlyPlayed.some((s) => s.id === song.id);
@@ -161,8 +155,8 @@ const App: React.FC = () => {
         favorites={favorites}
         isPlaying={isPlaying}
         currentSection={
-          activeTab === "favourites"
-            ? "Favourites"
+          activeTab === "favorites"
+            ? "favorites"
             : activeTab === "recently-played"
             ? "Recently Played"
             : activeTab === "top-tracks"
