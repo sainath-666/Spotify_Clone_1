@@ -124,7 +124,7 @@ const App: React.FC = () => {
       case "for-you":
       case "top-tracks":
         return true;
-      case "favorites":
+      case "favourites":
         return favorites.has(song.id);
       case "recently-played":
         return recentlyPlayed.some((s) => s.id === song.id);
@@ -155,8 +155,8 @@ const App: React.FC = () => {
         favorites={favorites}
         isPlaying={isPlaying}
         currentSection={
-          activeTab === "favorites"
-            ? "favorites"
+          activeTab === "favourites"
+            ? "Favourites"
             : activeTab === "recently-played"
             ? "Recently Played"
             : activeTab === "top-tracks"
