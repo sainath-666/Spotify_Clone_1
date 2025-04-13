@@ -46,10 +46,10 @@ Melodify is a cutting-edge music streaming platform built with React, TypeScript
 
 ```bash
 # Clone the repository
-git clone https://github.com/sainath-666/spotify_clone1
+git clone https://github.com/sainath-666/spotify_clone_1
 
 # Navigate to project directory
-cd spotify_clone1
+cd spotify_clone_1
 
 # Install dependencies
 npm install
